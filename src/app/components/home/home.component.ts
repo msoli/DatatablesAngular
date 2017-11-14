@@ -21,7 +21,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
 
-  dtOptions: DataTables.Settings = {};
+  // dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
 
   codigo: string;
   firstName: string;
@@ -42,6 +43,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pageLength: 10,
       processing: true,
       serverSide: true,
+      select: true,
+
       ajax: {
         url: 'https://l-lin.github.io/angular-datatables/data/data.json',
         data: function datos(data: any) {
@@ -99,6 +102,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
 
       ]
+
     };
 
     this.searchTerms
@@ -127,6 +131,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.searchTerms.next(term);
   }
 
+  search3(): void {
+
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+
+      console.log(dtInstance.rows({selected: true}).data());
+
+
+    });
+  }
+
   search(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
@@ -134,9 +148,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+
   ngAfterViewInit(): void {
 
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+
+
       dtInstance.columns().every(function () {
         const that = this;
         $('input', this.header()).on('keyup change', function () {
